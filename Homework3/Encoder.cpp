@@ -40,7 +40,8 @@ void printOut(vector<vector<int>> linesVector){
 }
 
 int main(){
-
+    try{
+        
     cout << "Enter Your Values:\n";
     vector<vector<int>> linesVector = reader();
 
@@ -48,4 +49,10 @@ int main(){
     printOut(linesVector);  
       
     return 0;
+    }
+    catch(const std::exception& e){
+        std::cerr << e.what() << '\n';
+        return 1;
+    }
+    
 }
