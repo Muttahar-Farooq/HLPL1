@@ -1,50 +1,19 @@
 #include "../std_lib_facilities.h"
+#include "reader.h"
 
-int dencoder(int num){
-    int output = to_string(num).length();
-    int reverse = (pow(10,output)/9);
-    if (num != reverse) error("invalid input!");
-    return output;
-}
-
-vector<vector<int>> reader(){
-    vector<vector<int>> linesVector; // Vector to store single line vectors
-    int lines;
-    cin >> lines; // Reads initial number of lines to be entered
-    if (lines < 1) error("Please enter a valid value!");
-
-    for (int i = 0; i < lines; i++){
-        
-        vector<int> lenghtVector; // vector to store each line as string
-        int length;
-        cin >> length; // Reads length of each line
-        if (length < 1 || length > 10) error("Length should be >=1 and <=10!");
-
-        for (int j = 0; j < length; j++){
-            int num;
-            cin >> num; //Reads single number to be encoded
-            
-            lenghtVector.push_back(dencoder(num)); 
-        }
-        sort(lenghtVector.begin(), lenghtVector.end()); // Sorts each line in ascending order
-        linesVector.push_back(lenghtVector);
-    }
-    return linesVector;
-}
-
-void printOut(vector<vector<int>> linesVector){
-    for (auto i : linesVector){
-            for (auto j: i){
-                cout << j << "-";
-            }
-            cout << "\b \n";
-        }
+string decoder(string num){
+    const char mychar = '1';
+    int output = num.length();
+    string reverse = string(output, mychar);
+    if (output < 1 || output > 100) error("Entered number is out of range!");
+    if (num != reverse) error("Entered number is not of correct format!");
+    return to_string(output);
 }
 
 int main(){
     try{       
     cout << "Enter Your Values:\n";
-    vector<vector<int>> linesVector = reader();
+    vector<vector<string>> linesVector = reader(decoder);
 
     cout << "Output:\n";
     printOut(linesVector);  
