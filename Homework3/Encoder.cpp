@@ -8,11 +8,12 @@ string encoder(string num){
     return string(intNum, mychar); 
 }
 
+bool isDecode = false;
 
 int main(){
     try{
         cout << "Enter Your Values:\n";
-        vector<vector<string>> linesVector = reader(encoder) ;
+        vector<vector<string>> linesVector = reader(encoder,isDecode) ;
 
         cout << "Output:\n";
         printOut(linesVector);  

@@ -10,10 +10,12 @@ string decoder(string num){
     return to_string(output);
 }
 
+bool isDecode = true;
+
 int main(){
     try{       
     cout << "Enter Your Values:\n";
-    vector<vector<string>> linesVector = reader(decoder);
+    vector<vector<string>> linesVector = reader(decoder, isDecode);
 
     cout << "Output:\n";
     printOut(linesVector);  
