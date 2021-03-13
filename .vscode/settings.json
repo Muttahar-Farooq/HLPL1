@@ -4,6 +4,7 @@
         "iostream": "cpp",
         "bitset": "cpp",
         "string_view": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "*.tcc": "cpp"
     }
 }
