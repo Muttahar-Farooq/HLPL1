@@ -6,5 +6,6 @@
         "string_view": "cpp",
         "cmath": "cpp",
         "*.tcc": "cpp"
-    }
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

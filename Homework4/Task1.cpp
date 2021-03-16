@@ -1,5 +1,5 @@
 #include "../std_lib_facilities.h"
-#include <sstream>
+
 
 struct nameAge
 {
@@ -36,37 +36,28 @@ int main(){
     int tempAge;
     string tempName;
 
-    while(true){
-        cout << "Press 1 to enter a value. Press 2 to print and exit: ";
-        cin >> input;
-        if (input == 1){
-            
-            cout << "\nEnter the name: ";
-            cin >> tempName;
-            names.push_back(tempName); 
-            
+    cout << "Enter the data of five people: \n";
+    for(int i; i<5 ; i++){
+                    
+        cout << "\nEnter the name "<< i+1 << " : ";
+        cin >> tempName;
+        names.push_back(tempName);  
 
-            while (true){
-                cout << "\nEnter the age: ";
-                cin >> tempAge;
-                if (cin.fail() || tempAge > 150 || tempAge <= 0){
-                    cin.clear();
-                    cin.ignore( 512, '\n' ); 
-                    cout << "Invalid or out of range age value!";
-                } 
-                else break;                 
-            }
-            ages.push_back(tempAge);
-            cout << "\n";
-        } 
-        else if (input == 2){
-            
-            myPrint(names, ages);
-            break;
-            
+        while (true){
+            cout << "\nEnter the age " << i+1 << " : ";
+            cin >> tempAge;
+            if (cin.fail() || tempAge > 150 || tempAge <= 0){
+                cin.clear();
+                cin.ignore( 512, '\n' ); 
+                cout << "Invalid or out of range age value!";
+            } 
+            else break;                 
         }
-        else cout << "Please enter a valid value!";
+            ages.push_back(tempAge);
+        
     }
- 
-     return 0;
+    cout << "\n";        
+    myPrint(names, ages);
+            
+    return 0;
 }
