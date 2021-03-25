@@ -12,6 +12,36 @@ private:
     };    
     position W;
     position B;
+
+    vector<position> nextPositionW;
+    vector<position> nextPositionB;
+
+
+    void nextPositionsCalc(vector<position>& nextPos, position P){
+        nextPos.clear();
+        int nextRow = 0;
+        int nextCol = 0;
+        for (int i=-1; i<=1; i=i+2){
+            for (int j=-2; j<=2; j=j+4){
+                nextRow = P.row+i;
+                nextCol = P.column+j;
+                if (nextRow >= 0 && nextCol >= 0 && nextRow <= 7 && nextCol <= 7)
+                    if (isEmpty(nextRow,nextCol)) nextPos.push_back({nextRow,nextCol});
+                nextRow = P.row+j;
+                nextCol = P.column+i;
+                if (nextRow >= 0 && nextCol >= 0 && nextRow <= 7 && nextCol <= 7)
+                    if (isEmpty(nextRow,nextCol)) nextPos.push_back({nextRow,nextCol});
+            }
+        }
+    }
+    void updateNextPositionsW(){
+        nextPositionsCalc(nextPositionW, W);
+    }
+    void updateNextPositionsB(){
+        nextPositionsCalc(nextPositionB, B);
+    }
+
+    
     
 public:
     
@@ -22,19 +52,23 @@ public:
         B.row = 7; B.column = 7;
         grid[W.row][W.column] = "W";
         grid[B.row][B.column] = "B";
+        updateNextPositionsW();
+        updateNextPositionsB();
     }
     
-    void updateW(int r, int c){
+    void moveW(int r, int c){
         grid[W.row][W.column] = "-";
         W.row = r;
         W.column = c;
         grid[W.row][W.column] = "W";
+        updateNextPositionsW();
     }
-    void updateB(int r, int c){
+    void moveB(int r, int c){
         grid[B.row][B.column] = "-";
         B.row = r;
         B.column = c;
         grid[B.row][B.column] = "B";
+        updateNextPositionsB();
     }
 
     bool isEmpty(int r, int c) {
@@ -50,6 +84,18 @@ public:
         return B;
     }
 
+    vector<position> getNextPositionW(){
+        return nextPositionW;
+    }
+    vector<position> getNextPositionB(){
+        return nextPositionB;
+    }
+
+    bool isGameEnd(){
+        if (nextPositionW.empty() || nextPositionB.empty()) return true;
+        else return false;
+    }
+
     void printOut(){
         cout << "___";
         for (int i = 1; i <= 8; i++) cout << "|_"<< i << "_";
@@ -62,7 +108,7 @@ public:
         }
     }
 
-
+    
 };
 
 int main(){
@@ -74,12 +120,16 @@ int main(){
     myGrid.printOut();
     cout << twoLineSpace;
 
-    myGrid.updateW(3,4);  //updates the postion of W
+    myGrid.moveW(3,4);  //updates the postion of W
     myGrid.printOut();
     cout << twoLineSpace;
 
     cout <<"Row  of W:"<< myGrid.positionW().row+1;          //outputs the row position of W
     cout << "\nColumn of B:" << myGrid.positionB().column+1; //outputs the column position of W
+    
+    for (auto e: myGrid.getNextPositionB()){
+        cout << "| row = "<< e.row << " Col = " << e.column << "\n";
+    }
 
     return 0;
 }
