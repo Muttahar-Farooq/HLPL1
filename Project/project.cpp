@@ -62,6 +62,7 @@ public:
         W.column = c;
         grid[W.row][W.column] = "W";
         updateNextPositionsW();
+        updateNextPositionsB();
     }
     void moveB(int r, int c){
         grid[B.row][B.column] = "-";
@@ -69,6 +70,7 @@ public:
         B.column = c;
         grid[B.row][B.column] = "B";
         updateNextPositionsB();
+        updateNextPositionsW();
     }
 
     bool isEmpty(int r, int c) {
@@ -120,14 +122,15 @@ int main(){
     myGrid.printOut();
     cout << twoLineSpace;
 
-    myGrid.moveW(3,4);  //updates the postion of W
+    myGrid.moveW(6,5);  //updates the postion of W
     myGrid.printOut();
     cout << twoLineSpace;
 
     cout <<"Row  of W:"<< myGrid.positionW().row+1;          //outputs the row position of W
     cout << "\nColumn of B:" << myGrid.positionB().column+1; //outputs the column position of W
     
-    for (auto e: myGrid.getNextPositionB()){
+    cout << "\n\n";
+    for (auto e: myGrid.getNextPositionW()){
         cout << "| row = "<< e.row << " Col = " << e.column << "\n";
     }
 
