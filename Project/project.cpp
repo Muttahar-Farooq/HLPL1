@@ -34,14 +34,10 @@ private:
             }
         }
     }
-    void updateNextPositionsW(){
+    void updateNextPositions(){
         nextPositionsCalc(nextPositionW, W);
-    }
-    void updateNextPositionsB(){
         nextPositionsCalc(nextPositionB, B);
-    }
-
-    
+    }    
     
 public:
     
@@ -52,8 +48,7 @@ public:
         B.row = 7; B.column = 7;
         grid[W.row][W.column] = "W";
         grid[B.row][B.column] = "B";
-        updateNextPositionsW();
-        updateNextPositionsB();
+        updateNextPositions();
     }
     
     void moveW(int r, int c){
@@ -61,16 +56,14 @@ public:
         W.row = r;
         W.column = c;
         grid[W.row][W.column] = "W";
-        updateNextPositionsW();
-        updateNextPositionsB();
+        updateNextPositions();
     }
     void moveB(int r, int c){
         grid[B.row][B.column] = "-";
         B.row = r;
         B.column = c;
         grid[B.row][B.column] = "B";
-        updateNextPositionsB();
-        updateNextPositionsW();
+        updateNextPositions();
     }
 
     bool isEmpty(int r, int c) {
