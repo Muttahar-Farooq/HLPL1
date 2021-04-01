@@ -1,15 +1,23 @@
 #include "../std_lib_facilities.h"
 
+struct position
+    {
+        int row;
+        int column;
+    }; 
+
 class Grid{
 private:
-    
-    vector<string> line;
-    vector<vector<string>> grid;
+    char spaceChar = 177;
+    char lineChar = 186;
     struct position
     {
         int row;
         int column;
-    };    
+    }; 
+    vector<char> line;
+    vector<vector<char>> grid;
+       
     position W;
     position B;
 
@@ -41,33 +49,37 @@ private:
     
 public:
     
-    Grid(){
-        for (int i = 0; i < 8; i++) line.push_back("*");
+    Grid(){          
+
+        for (int i = 0; i < 8; i++) line.push_back(spaceChar);
         for (int i = 0; i < 8; i++) grid.push_back(line);
         W.row = 0; W.column = 0;
         B.row = 7; B.column = 7;
-        grid[W.row][W.column] = "W";
-        grid[B.row][B.column] = "B";
+        grid[W.row][W.column] = 'W';
+        grid[B.row][B.column] = 'B';
         updateNextPositions();
     }
     
-    void moveW(int r, int c){
-        grid[W.row][W.column] = "-";
-        W.row = r;
-        W.column = c;
-        grid[W.row][W.column] = "W";
-        updateNextPositions();
-    }
-    void moveB(int r, int c){
-        grid[B.row][B.column] = "-";
-        B.row = r;
-        B.column = c;
-        grid[B.row][B.column] = "B";
-        updateNextPositions();
+    void move(char turn, int r, int c){
+        if (turn == 'W'){
+            grid[W.row][W.column] = '-';
+            W.row = r;
+            W.column = c;
+            grid[W.row][W.column] = 'W';
+        } else
+        {
+           grid[B.row][B.column] = '-';
+            B.row = r;
+            B.column = c;
+            grid[B.row][B.column] = 'B';
+        }
+         updateNextPositions();
+        
+       
     }
 
     bool isEmpty(int r, int c) {
-        if (grid[r][c] == "*") return true;
+        if (grid[r][c] == spaceChar) return true;
         else return false;        
     }
 
@@ -79,11 +91,15 @@ public:
         return B;
     }
 
-    vector<position> getNextPositionW(){
-        return nextPositionW;
-    }
-    vector<position> getNextPositionB(){
-        return nextPositionB;
+    vector<position> getNextPosition(char turn){
+        if (turn == 'W'){
+            return nextPositionW;
+        } else
+        {
+            return nextPositionB;
+        }
+        
+        
     }
 
     bool isGameEnd(){
@@ -98,9 +114,10 @@ public:
         char myChar = 'a';
         for (auto v: grid){
             cout << myChar << "  ";  myChar++;
-            for (auto h: v) cout << "| "<< h << " ";
-            cout << "|\n";
+            for (auto h: v) cout << lineChar << " " <<  h << " ";
+            cout << lineChar <<"\n";
         }
+        cout << "\n";
     }
 
     
@@ -108,24 +125,48 @@ public:
 
 int main(){
     string twoLineSpace = "\n\n";
+    position currentMove;
+    int option;
+    char alphaChar = 'a';
+    char turn = 'W';
 
 
     Grid myGrid;       //creates an instance of Grid class
-    cout << twoLineSpace;
-    myGrid.printOut();
-    cout << twoLineSpace;
-
-    myGrid.moveW(6,5);  //updates the postion of W
-    myGrid.printOut();
-    cout << twoLineSpace;
-
-    cout <<"Row  of W:"<< myGrid.positionW().row+1;          //outputs the row position of W
-    cout << "\nColumn of B:" << myGrid.positionB().column+1; //outputs the column position of W
     
-    cout << "\n\n";
-    for (auto e: myGrid.getNextPositionW()){
-        cout << "| row = "<< e.row << " Col = " << e.column << "\n";
+    while(!myGrid.isGameEnd()){
+        system("cls");
+        myGrid.printOut();
+        
+        int i=0;
+        
+        if (turn == 'W') cout << "It is White Horse's turn!\n";
+        else cout << "It is Black Horse's turn!\n";
+        cout << twoLineSpace << "Possible values for to move:\n";
+        cout << "(Option 0): Skip turn!\n";
+        for (auto e:myGrid.getNextPosition(turn)){
+            i=i+1;
+            cout <<"(Option "<<i<<"): Row = "<< char(alphaChar+e.row)<<e.column+1<<endl; 
+        }
+        cout << "Select an option from above: ";
+
+        while (true){
+            cin >> option;
+            if (option > 0 and option <= myGrid.getNextPosition(turn).size()){ myGrid.move(turn,myGrid.getNextPosition(turn)[option-1].row,myGrid.getNextPosition(turn)[option-1].column);break;}
+            else if (option == 0) {break;}
+            else cout << "Please Enter a valid value: ";
+        }
+
+        if (turn == 'W') turn = 'B';
+        else turn = 'W';
+                
     }
+
+
+    cout << "\n\n++++++++++++++++++CONGRATS++++++++++++++++++++\n";
+    if (myGrid.getNextPosition('W').empty()) cout << "      WINNER OF THIS GAME IS BLACK HORSE\n";
+    else cout << "      WINNER OF THIS GAME IS WHITE HORSE\n";
+    cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++";
+
 
     return 0;
 }
