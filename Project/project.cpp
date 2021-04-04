@@ -108,14 +108,27 @@ public:
     }
 
     void printOut(){
-        cout << "___";
-        for (int i = 1; i <= 8; i++) cout << "|_"<< i << "_";
-        cout << "|\n";
+    vector<int> topl = {201,205,205,205,203,205,205,205,203,205,205,205,203,205,205,205,203,205,205,205,203,205,205,205,203,205,205,205,203,205,205,205,187};
+    vector<int> midl = {204,205,205,205,206,205,205,205,206,205,205,205,206,205,205,205,206,205,205,205,206,205,205,205,206,205,205,205,206,205,205,205,185};
+    vector<int> bottoml ={200,205,205,205,202,205,205,205,202,205,205,205,202,205,205,205,202,205,205,205,202,205,205,205,202,205,205,205,202,205,205,205,188};
+
+        cout << "   ";
+        for (int i = 1; i <= 8; i++) cout << "  "<< i << " ";
+        cout << "\n";
         char myChar = 'a';
+
+        cout << "   ";
+        for (auto i: topl) cout<<char(i);
+        cout << endl;
+
         for (auto v: grid){
             cout << myChar << "  ";  myChar++;
             for (auto h: v) cout << lineChar << " " <<  h << " ";
-            cout << lineChar <<"\n";
+            cout << lineChar <<"\n   ";
+
+            if (v == grid[7]) for (auto i: bottoml) cout<< char(i);
+            else for (auto i: midl) cout<< char(i);
+            cout << endl;
         }
         cout << "\n";
     }
@@ -132,10 +145,12 @@ int main(){
 
 
     Grid myGrid;       //creates an instance of Grid class
+
+    system("cls");
+    myGrid.printOut();
     
     while(!myGrid.isGameEnd()){
-        system("cls");
-        myGrid.printOut();
+        
         
         int i=0;
         
@@ -158,6 +173,9 @@ int main(){
 
         if (turn == 'W') turn = 'B';
         else turn = 'W';
+
+        system("cls");
+        myGrid.printOut();
                 
     }
 
@@ -165,7 +183,7 @@ int main(){
     cout << "\n\n++++++++++++++++++CONGRATS++++++++++++++++++++\n";
     if (myGrid.getNextPosition('W').empty()) cout << "      WINNER OF THIS GAME IS BLACK HORSE\n";
     else cout << "      WINNER OF THIS GAME IS WHITE HORSE\n";
-    cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++";
+    cout << "++++++++++++++++++++++++++++++++++++++++++++++";
 
 
     return 0;
