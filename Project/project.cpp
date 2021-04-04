@@ -156,7 +156,7 @@ int main(){
         
         if (turn == 'W') cout << "It is White Horse's turn!\n";
         else cout << "It is Black Horse's turn!\n";
-        cout << twoLineSpace << "Possible values for to move:\n";
+        cout << twoLineSpace << "Possible values to move:\n";
         cout << "(Option 0): Skip turn!\n";
         for (auto e:myGrid.getNextPosition(turn)){
             i=i+1;
