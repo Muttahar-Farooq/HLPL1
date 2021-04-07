@@ -1,14 +1,11 @@
 #include "../std_lib_facilities.h"
+#include <conio.h>
 
-struct position
-    {
-        int row;
-        int column;
-    }; 
+//<--------------------Class for Game------------------->
 
 class Grid{
 private:
-    char spaceChar = 177;
+    char spaceChar = 176;
     char lineChar = 186;
     struct position
     {
@@ -48,8 +45,15 @@ private:
     }    
     
 public:
-    
-    Grid(){          
+    Grid(){
+        initialize();
+    }
+
+    void initialize(){          
+        nextPositionW.clear();
+        nextPositionB.clear();
+        line.clear();
+        grid.clear();
 
         for (int i = 0; i < 8; i++) line.push_back(spaceChar);
         for (int i = 0; i < 8; i++) grid.push_back(line);
@@ -102,6 +106,31 @@ public:
         
     }
 
+    void addNextPosOnGrid(char turn){
+        int i = 49;
+        if (turn == 'W') {
+            for (auto e:nextPositionW){
+                grid[e.row][e.column] = i;
+                i=i+1;
+            }
+        }
+        else {
+            for (auto e:nextPositionB){
+                grid[e.row][e.column] = i;
+                i=i+1;
+            }
+        }
+    }
+
+    void delNextPosOnGrid(char turn){
+        if (turn == 'W') {
+            for (auto e:nextPositionW) grid[e.row][e.column] = spaceChar;
+        }
+        else {
+            for (auto e:nextPositionB) grid[e.row][e.column] = spaceChar;
+        }
+    }
+
     bool isGameEnd(){
         if (nextPositionW.empty() || nextPositionB.empty()) return true;
         else return false;
@@ -135,56 +164,136 @@ public:
 
     
 };
+// <------------------------------------------------------------------>
+
+
+//<-------------------------Game Logic--------------------------------->
+
+struct position
+    {
+        int row;
+        int column;
+    };
+
+void instructions(){
+    cout << "\nThese are the instructions!";
+}
+
+void hlpl()
+{
+	cout << "             __    __   __      .______    __          __  \n";
+	cout << "            |  |  |  | |  |     |   _  \\  |  |        /_ | \n";
+	cout << "            |  |__|  | |  |     |  |_)  | |  |         | | \n";
+	cout << "            |   __   | |  |     |   ___/  |  |         | | \n";
+	cout << "            |  |  |  | |  `----.|  |      |  `----.    | | \n";
+	cout << "            |__|  |__| |_______||__|      |_______|    |_| \n";
+}
+
+void menu()
+{
+	cout << "\n\n\t\t\t1 - Start Game\n\n";
+	cout << "\t\t\t2 - Rules\n\n";
+	cout << "\t\t\t3 - Quit\n\n";
+}
 
 int main(){
-    string twoLineSpace = "\n\n";
     position currentMove;
     int option;
     char alphaChar = 'a';
     char turn = 'W';
-
+    char key;
+    bool quitKey = false;
 
     Grid myGrid;       //creates an instance of Grid class
 
     system("cls");
-    myGrid.printOut();
+    hlpl();
+    menu();
     
-    while(!myGrid.isGameEnd()){
-        
-        
-        int i=0;
-        
-        if (turn == 'W') cout << "It is White Horse's turn!\n";
-        else cout << "It is Black Horse's turn!\n";
-        cout << twoLineSpace << "Possible values to move:\n";
-        cout << "(Option 0): Skip turn!\n";
-        for (auto e:myGrid.getNextPosition(turn)){
-            i=i+1;
-            cout <<"(Option "<<i<<"): Row = "<< char(alphaChar+e.row)<<e.column+1<<endl; 
-        }
-        cout << "Select an option from above: ";
+    while (quitKey == false){
+        key = _getch();
 
-        while (true){
-            cin >> option;
-            if (option > 0 and option <= myGrid.getNextPosition(turn).size()){ myGrid.move(turn,myGrid.getNextPosition(turn)[option-1].row,myGrid.getNextPosition(turn)[option-1].column);break;}
-            else if (option == 0) {break;}
-            else cout << "Please Enter a valid value: ";
-        }
+        switch (key){
+        case '1':
+            system("cls");
+            myGrid.addNextPosOnGrid(turn);
+            myGrid.printOut();
+            myGrid.delNextPosOnGrid(turn);
 
-        if (turn == 'W') turn = 'B';
-        else turn = 'W';
-
-        system("cls");
-        myGrid.printOut();
+            while(!myGrid.isGameEnd()){
                 
+                
+                int i=0;
+                
+                if (turn == 'W') cout << "It is White Horse's turn!\n";
+                else cout << "It is Black Horse's turn!\n";
+                cout << "\nPossible values to move:\n";
+                cout << "\n(Option 0): Skip turn!\n";
+                for (auto e:myGrid.getNextPosition(turn)){
+                    i=i+1;
+                    cout <<"(Option "<<i<<"): Row = "<< char(alphaChar+e.row)<<e.column+1<<endl; 
+                }
+                cout << "Select an option from above: ";
+
+                while (true){
+                    cin >> option;
+                    if (option > 0 and option <= myGrid.getNextPosition(turn).size()){ myGrid.move(turn,myGrid.getNextPosition(turn)[option-1].row,myGrid.getNextPosition(turn)[option-1].column);break;}
+                    else if (option == 0) {break;}
+                    else cout << "Please Enter a valid value: ";
+                }
+
+                if (turn == 'W') turn = 'B';
+                else turn = 'W';
+
+                system("cls");
+                myGrid.addNextPosOnGrid(turn);
+                myGrid.printOut();
+                myGrid.delNextPosOnGrid(turn);
+                        
+            }
+
+
+            cout << "\n\n++++++++++++++++++CONGRATS++++++++++++++++++++\n";
+            if (myGrid.getNextPosition('W').empty()) cout << "      WINNER OF THIS GAME IS BLACK HORSE\n";
+            else cout << "      WINNER OF THIS GAME IS WHITE HORSE\n";
+            cout << "++++++++++++++++++++++++++++++++++++++++++++++";
+
+            cout << "\n\nPress Q key to go back!";
+            while(key = getch()){
+                if (key == 'q') break;
+            };
+            
+            system("cls");
+            myGrid.initialize();
+            hlpl();
+            menu();
+            break;
+        
+        case '2':
+            system("cls");
+            myGrid.printOut();
+            instructions();
+
+            cout << "\n\nPress any key to go back!";
+            key = getch();
+
+            system("cls");
+            hlpl();
+            menu();
+            break;
+
+        case '3':
+            quitKey = true;
+            break;
+        
+        default:
+            cout << "\nPlease press a valid key!";
+            break;
+        }
+        
     }
-
-
-    cout << "\n\n++++++++++++++++++CONGRATS++++++++++++++++++++\n";
-    if (myGrid.getNextPosition('W').empty()) cout << "      WINNER OF THIS GAME IS BLACK HORSE\n";
-    else cout << "      WINNER OF THIS GAME IS WHITE HORSE\n";
-    cout << "++++++++++++++++++++++++++++++++++++++++++++++";
-
-
+    
     return 0;
 }
+
+
