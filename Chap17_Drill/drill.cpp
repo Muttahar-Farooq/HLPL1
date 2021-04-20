@@ -48,25 +48,25 @@ int main(){
 
     int seven = 7;
     int* p1 = &seven;
-    cout << "P1 Adress = " << p1 << "and the value = " << *p1 << endl;  
+    cout << "P1 Adress = " << p1 << " and the value = " << *p1 << endl;  
    
     int arr7[7];
     for (int i=0; i<7; i++) arr7[i] = pow(2,i);
     int* p2 = arr7;
-    cout << "P2 Adress = " << p2 << "and the value = " ;
+    cout << "P2 Adress = " << p2 << " and the value = " ;
     print_array(cout,p2,7);
 
     int* p3 = p2;
     p2 = p1;
     p2 = p3;
-    cout << "P1 Adress = " << p1 << "and the value = " << *p1 << endl;
-    cout << "P2 Adress = " << p2 << "and the value = " << *p2 << endl;
+    cout << "P1 Adress = " << p1 << " and the value = " << *p1 << endl;
+    cout << "P2 Adress = " << p2 << " and the value = " << *p2 << endl;
 
-    delete[] p1, p2, p3; 
-
+    p1 = nullptr; p2=nullptr; p3=nullptr; 
+//  
     int arr10_2[10];
     for (int i=0; i<10; i++) arr10_2[i] = pow(2,i);
-    p1 = arr10;
+    p1 = arr10_2;
 
     int arr10_3[10];    
     p2 = arr10_3;
@@ -79,7 +79,10 @@ int main(){
 
     vector<int> vec10_3;
     vector<int>* P2 = &vec10_3;
-    for (int i=0; i<10; i++) P2[i] = P1[i];
+    for (int i=0; i<P1->size(); i++) P2->push_back((*P1)[i]);
+
+    cout << "\nP2 output:\n";
+    for (int i=0; i<P2->size(); i++) cout << (*P2)[i] << " ";
 
     return 0;
 }

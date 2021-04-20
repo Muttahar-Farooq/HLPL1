@@ -18,9 +18,9 @@ void f(int* arr, int n){
     for (int i=0; i<10; i++) cout << la[i] << endl;
 
     int* p = new int[n];
-    for (int i=0; i<n; i++) p[i] = arr[i];
+    for (int* i=p; i<p+n; i++) *i = arr[i-p];
     cout << "\nElements of free store array are:\n";
-    for (int i=0; i<10; i++) cout << p[i] << endl;
+    for (int* i=p; i<p+n; i++) cout << *i << endl;
     delete[] p;
 }
 
